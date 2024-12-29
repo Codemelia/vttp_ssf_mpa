@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuneTrove - View Profile</title>
+    <link href="/viewprofilestyles.css" rel="stylesheet">
+    <link rel="icon" href="/tunetrove_logo.png" type="image/png">
+    <script>
+        // save the scroll position before the page unloads
+        window.addEventListener("beforeunload", () => {
+            localStorage.setItem("scrollPosition", window.scrollY);
+        });
+
+        // smooth scroll restoration on page load
+        window.addEventListener("load", () => {
+            const scrollPosition = localStorage.getItem("scrollPosition");
+            if (scrollPosition) {
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: parseInt(scrollPosition, 10),
+                        behavior: "smooth", // smooth scrolling effect
+                    });
+                }, 50); // delay ensures layout is stable
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>TuneTrove</h1>
+        <nav>
+            <ul class="menu">
+                <li><a data-th-href="@{/home}">Home</a></li>
+                <li><a data-th-href="@{/owner}">My Listings</a></li>
+                <li><a data-th-href="@{/calendar}">My Calendar</a></li>
+                <li><a data-th-href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <section class="about-user" data-th-object="${userProfile}">
+            <h2>User Profile</h2>
+                <div>
+                    <h3 data-th-text="${username}"></h3>
+                </div>
+    
+                <!-- display prof pic if available -->
+                <div class="profile-pic" data-th-if="*{profilePicture != null and !profilePicture.isEmpty()}">
+                    <img data-th-src="*{profilePicture}" alt="Profile Picture">
+                </div>
+    
+                <!-- display default prof pic if unavailable -->
+                <div class="profile-pic" data-th-if="*{profilePicture == null or profilePicture.isEmpty()}">
+                    <img src="/default_prof_pic.jpg" alt="Default Profile Picture" style="max-width: 150px; max-height: 150px;">
+                </div>
+    
+                <div>
+                    <h4>Name/Nickname</h4>
+                    <p data-th-text="*{nickname}"></p>
+                </div>
+    
+                <div>
+                    <h4>Gender</h4>
+                    <p data-th-text="*{gender}"></p>
+                </div>
+    
+                <div>
+                    <h4>Meetup/Delivery Preferences</h4>
+                    <p data-th-text="*{dealPreferences}"></p>
+                </div>
+    
+                <div>
+                    <h4>About User</h4>
+                    <p class="last-text" data-th-text="*{bio}"></p>
+                </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+    </footer>
+</body>
+</html>

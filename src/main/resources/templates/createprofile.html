@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+        <link rel="stylesheet" href="/createprofilestyles.css">
+        <title>TuneTrove - Create or Edit Profile</title>
+    </head>
+    <body>
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/home}">Home</a></li>
+                    <li><a data-th-href="@{/owner}">My Listings</a></li>
+                    <li><a data-th-href="@{/calendar}">My Calendar</a></li>
+                    <li><a data-th-href="@{/logout}">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <section id="profile-form">
+                <h1>Create or Edit Profile</h1>
+                <div class="flashMessages">
+                    <p class="text-danger" data-th-if="${errorMessage}" data-th-text="${errorMessage}"></p>
+                    <p class="text-success" data-th-if="${successMessage}" data-th-text="${successMessage}"></p>
+                </div>
+                
+                <div class="form-container">
+                    <form data-th-action="@{/profile/submit}" method="post" data-th-object="${userProfile}">
+    
+                        <div id="username">
+                            <!-- username - cannot edit -->
+                            <h2 data-th-text="${username}"></h2>
+                        </div>
+    
+                        <div class="profile-picture">
+                            <h3>Profile Picture</h3>
+    
+                            <!-- display the profile picture if available -->
+                            <div data-th-if="*{profilePicture != null and !profilePicture.isEmpty()}">
+                                <img data-th-src="*{profilePicture}" alt="Profile Picture">
+                            </div>
+    
+                            <!-- display default prof pic if unavailable -->
+                            <div data-th-if="*{profilePicture == null or profilePicture.isEmpty()}">
+                                <img src="/default_prof_pic.jpg" alt="Default Profile Picture">
+                            </div>
+                            
+                            <label for="profilePicture">Add or edit your profile picture:</label>
+                            <input type="url" id="profilePicture" name="profilePicture" data-th-field="*{profilePicture}" placeholder="Enter a valid image URL in JPG or PNG format">
+                            <div data-th-if="${#fields.hasErrors('profilePicture')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('profilePicture')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+    
+                        <div class="nickname">
+                            <label for="nickname">Name:</label>
+                            <input type="text" id="nickname" name="nickname" data-th-field="*{nickname}" placeholder="Your name or nickname">
+                            <div data-th-if="${#fields.hasErrors('nickname')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('nickname')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+    
+                        <div class="gender">
+                            <label class="gender-label">Gender:</label>
+                            <div class="gender-options">
+                                <label for="male">
+                                    <input type="radio" id="male" data-th-field="*{gender}" value="Male">
+                                    Male</label>
+                                <label for="female">    
+                                    <input type="radio" id="female" data-th-field="*{gender}" value="Female">
+                                    Female</label>
+                                    
+                                <label for="others">
+                                    <input type="radio" id="others" data-th-field="*{gender}" value="Others">
+                                    Others</label>
+                        
+                                <label for="prefer-not-to-say">
+                                    <input type="radio" id="prefer-not-to-say" data-th-field="*{gender}" value="Prefer not to say">
+                                    Prefer not to say</label>
+                            </div>
+                        </div>                    
+    
+                        <div class="deal-preferences">
+                            <label for="dealPreferences">What are your preferred meetup locations or delivery methods?</label>
+                            <input type="text" id="dealPreferences" name="dealPreferences" data-th-field="*{dealPreferences}" placeholder="Your preferences">
+                            <div data-th-if="${#fields.hasErrors('dealPreferences')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('dealPreferences')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+                                    
+                        <div class="bio">
+                            <label for="bio">Bio:</label>
+                            <textarea id="bio" name="bio" data-th-field="*{bio}" placeholder="About you" rows="5" cols="50"></textarea>
+                            <div data-th-if="${#fields.hasErrors('bio')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('bio')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" type="submit">Save</button>
+    
+                    </form>
+                </div>
+            </section>
+        </div>
+        
+        <!-- footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TuneTrove - Calendar</title>
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png">
+        <link rel="stylesheet" href="/calendarstyles.css">
+        <script>
+            // save the scroll position before the page unloads
+            window.addEventListener("beforeunload", () => {
+                localStorage.setItem("scrollPosition", window.scrollY);
+            });
+
+            // smooth scroll restoration on page load
+            window.addEventListener("load", () => {
+                const scrollPosition = localStorage.getItem("scrollPosition");
+                if (scrollPosition) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(scrollPosition, 10),
+                            behavior: "smooth", // smooth scrolling effect
+                        });
+                    }, 50); // delay ensures layout is stable
+                }
+            });
+        </script>
+    </head>
+    <body>
+        
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/home}">Home</a></li>
+                    <li><a data-th-href="@{/owner}">My Listings</a></li>
+                    <li><a data-th-href="@{/profile/{username}(username=${username})}">My Profile</a></li>
+                    <li><a data-th-href="@{/logout}">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <section id="calendar">
+                <h2>Your Calendar - [[${monthName}]] [[${year}]]</h2>
+                <h3>Add your rentals or listings here to keep track of them!</h3>
+                
+                <div class="table-container">
+                    <table>
+                        <!-- days of the week -->
+                        <thead>
+                            <tr>
+                                <th>Sun</th>
+                                <th>Mon</th>
+                                <th>Tue</th>
+                                <th>Wed</th>
+                                <th>Thu</th>
+                                <th>Fri</th>
+                                <th>Sat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-th-each="week : ${weeks}">
+                                <!-- for each row (week), iterate through each day in the week -->
+                                <td data-th-each="day : ${week}" 
+                                    data-th-classappend="${day.date != null and day.isCurrentMonth} ? 'current' : ''">
+                                    
+                                    <span data-th-if="${day.date}">[[${day.date.dayOfMonth}]]</span>
+                        
+                                    <div data-th-each="b : ${bookings}">
+        
+                                        <!-- booking starts but doesn't end on curr day -->
+                                        <div class="booking" data-th-if="${day.date != null and 
+                                            day.date.toString() == b.startDate.substring(0, 10) and
+                                            day.date.toString() != b.endDate.substring(0, 10)}">
+                                            <div class="title" data-th-text="${b.title}"></div>
+                                            <div data-th-text="${b.startDate.substring(11, 16)}"></div>
+                                            <div class="booking-links">
+                                                <a data-th-href="@{/calendar/edit/{id}(id=${b.bookingId})}">Edit</a>
+                                                <form method="post" data-th-action="@{/calendar/delete/{id}(id=${b.bookingId})}">
+                                                    <button class="delete-btn" type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- booking starts and ends on the curr day -->
+                                        <div class="booking" data-th-if="${day.date != null and
+                                            day.date.toString() == b.startDate.substring(0,10) and
+                                            day.date.toString() == b.endDate.substring(0, 10)}">
+                                            <div class="title" data-th-text="${b.title}"></div>
+                                            <div data-th-text="${b.startDate.substring(11, 16)} + ' - ' + ${b.endDate.substring(11, 16)}"></div>
+                                            <div class="booking-links">
+                                                <a data-th-href="@{/calendar/edit/{id}(id=${b.bookingId})}">Edit</a>
+                                                <form method="post" data-th-action="@{/calendar/delete/{id}(id=${b.bookingId})}">
+                                                    <button class="delete-btn" type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+        
+                                        <!-- booking doesn't start but ends on curr day-->
+                                        <div class="booking" data-th-if="${day.date != null and 
+                                            day.date.toString() != b.startDate.substring(0, 10) and
+                                            day.date.toString() == b.endDate.substring(0, 10)}">
+                                            <div class="title" data-th-text="${b.title}"></div>
+                                            <div data-th-text="${b.endDate.substring(11, 16)}"></div>
+                                            <div class="booking-links">
+                                                <a data-th-href="@{/calendar/edit/{id}(id=${b.bookingId})}">Edit</a>
+                                                <form method="post" data-th-action="@{/calendar/delete/{id}(id=${b.bookingId})}">
+                                                    <button class="delete-btn" type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    
+                                        <!-- booking days between start and end dates -->
+                                        <div data-th-each="entry : ${bookingDays}">
+                                            <div class="booking" data-th-if="${entry.key == b.bookingId and day.date != null and
+                                                entry.value.contains(day.date)}">
+                                                <div class="title" data-th-text="${b.title}"></div>
+                                                <div class="booking-links">
+                                                    <a data-th-href="@{/calendar/edit/{id}(id=${b.bookingId})}">Edit</a>
+                                                    <form method="post" data-th-action="@{/calendar/delete/{id}(id=${b.bookingId})}">
+                                                        <button class="delete-btn" type="submit" onclick="return confirm('Are you sure you want to delete this booking?')">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>                                                               
+                    </table>
+                </div>
+                
+                <div class="prev-next">
+                    <a class="prev-btn" 
+                       data-th-href="@{'/calendar'(month = ${month == 1 ? 12 : month - 1}, year = ${month == 1 ? year - 1 : year})}">
+                        Previous Month
+                    </a> 
+                    <a class="next-btn" 
+                       data-th-href="@{'/calendar'(month = ${month == 12 ? 1 : month + 1}, year = ${month == 12 ? year + 1 : year})}">
+                        Next Month
+                    </a> 
+                </div>            
+            </section>
+    
+            <!-- booking form -->
+            <section id="booking-form">
+                <h2>Add or Edit A Booking</h2>
+    
+                <!-- success message -->
+                <div class="text-success" data-th-if="${successMessage}">
+                    <p data-th-text="${successMessage}"></p>
+                </div>
+    
+                <!-- error message -->
+                <div class="text-danger" data-th-if="${failMessage}">
+                    <p data-th-text="${failMessage}"></p>
+                </div>
+    
+                <form action="/calendar/save" method="post" data-th-object="${booking}">
+                    <input type="hidden" id="bookingId" data-th-field=*{bookingId}>
+                    <label for="title">Title <span style="color: red">*</span> :</label>
+                    <input type="text" id="title" data-th-field="*{title}" required>
+                    <label for="startDate">Start Date <span style="color: red">*</span> :</label>
+                    <input type="datetime-local" id="startDate" data-th-field="*{startDate}" required>
+                    <label for="endDate">End Date <span style="color: red">*</span> :</label>
+                    <input type="datetime-local" id="endDate" data-th-field="*{endDate}" required>
+                    <button type="submit">Save Booking</button>
+                </form> 
+            </section>
+        </div>
+
+        <!-- footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

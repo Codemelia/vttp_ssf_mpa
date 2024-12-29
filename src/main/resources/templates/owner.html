@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="/ownerstyles.css" rel="stylesheet">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png">
+        <title>TuneTrove - Listing Page</title>
+        <script>
+            // save the scroll position before the page unloads
+            window.addEventListener("beforeunload", () => {
+                localStorage.setItem("scrollPosition", window.scrollY);
+            });
+
+            // smooth scroll restoration on page load
+            window.addEventListener("load", () => {
+                const scrollPosition = localStorage.getItem("scrollPosition");
+                if (scrollPosition) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(scrollPosition, 10),
+                            behavior: "smooth", // smooth scrolling effect
+                        });
+                    }, 50); // delay ensures layout is stable
+                }
+            });
+        </script>
+    </head>
+    <body>
+
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/home}">Home</a></li>
+                    <li><a data-th-href="@{/profile/{username}(username=${username})}">My Profile</a></li>
+                    <li><a href="/calendar">My Calendar</a></li>
+                    <li><a data-th-href="@{/logout}">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <!-- welcome -->
+            <section id="welcome">
+                <h2>Your Listing Page</h2>
+                <p>Need some help getting started? Browse the quick actions below!</p>
+            </section>
+
+            <!-- quick actions -->
+            <section id="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions">
+                    <a data-th-href="@{/profile}"><button>Manage Your Profile</button></a>
+                    <a data-th-href="@{/owner/create}"><button>Create New Listing</button></a>
+                    <a href="#my-listings"><button>Manage Your Listings</button></a>
+                </div>
+            </section>
+
+            <!-- view listings -->
+            <section id="my-listings">
+                <h2>My Listings (<span data-th-text="${listingCount}"></span>)</h2>
+                <div class="action-bar">
+                    <a href="/owner/create"><button>Add New Listing</button></a>
+                    <!-- add filter or search functionality here -->
+                </div>
+                
+                <!-- error message -->
+                <div data-th-if="${failMessage}">
+                    <p class="text-danger" data-th-text="${failMessage}"></p>
+                </div>
+                <!-- success message -->
+                <div data-th-if="${successMessage}">
+                    <p class="successMessage" data-th-text="${successMessage}"></p>
+                </div>
+                <div class="table-container">
+                    <table class="table-wrapper">
+                        <thead>
+                            <tr>
+                                <th>Listing ID</th>
+                                <th>Listing Title</th>
+                                <th>Instrument Listed</th>
+                                <th>Description</th>
+                                <th>Fees</th>
+                                <th>Availability</th>
+                                <th>Number of Likes</th>
+                                <th>Edit Listing</th>
+                                <th>Delete Listing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-th-if="${#lists.isEmpty(ownerListings)}">
+                                <td colspan="9">No listings available</td>
+                            </tr>
+                            <tr data-th-unless="${#lists.isEmpty(ownerListings)}" data-th-each="listing : ${ownerListings}">
+                                <td data-th-text="${listing.listingId}"></td>
+                                <td data-th-text="${listing.title}"></td>
+                                <td data-th-text="${listing.instrumentType + ' (' + listing.instrumentBrand + ' - ' + listing.instrumentModel + ') '}"></td>
+                                <td data-th-text="${listing.description}"></td>
+                                <td data-th-text="${listing.fees}"><span data-th-text=" ${listing.priceModel}"></span></td>
+                                <td data-th-text="${listing.isAvailable ? 'Available' : 'Unavailable'}"></td>
+                                <td data-th-text="${likesMap[listing.listingId]}">Likes: 0</td>
+                                <td class="edit">
+                                    <a data-th-href="@{/owner/edit/{id}(id=${listing.listingId})}"><button>Edit</button></a>
+                                </td>
+                                <td class="delete">
+                                    <form method="POST" data-th-action="@{/owner/delete/{id}(id=${listing.listingId})}">
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this listing?');">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

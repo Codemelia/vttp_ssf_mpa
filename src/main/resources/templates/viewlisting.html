@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <link href="/viewlistingstyles.css" rel="stylesheet">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+        <title>TuneTrove - View Listing</title>
+        <script>
+            // save the scroll position before the page unloads
+            window.addEventListener("beforeunload", () => {
+                localStorage.setItem("scrollPosition", window.scrollY);
+            });
+
+            // smooth scroll restoration on page load
+            window.addEventListener("load", () => {
+                const scrollPosition = localStorage.getItem("scrollPosition");
+                if (scrollPosition) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(scrollPosition, 10),
+                            behavior: "smooth", // smooth scrolling effect
+                        });
+                    }, 50); // delay ensures layout is stable
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/home}">Back to Home</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <section id="listing-details" data-th-object="${listing}">
+                <h2>Listing Details</h2>
+                <table class="listing-images">
+                    <tr>
+                        <td data-th-if="*{instrumentPics.size >= 1}">
+                            <img data-th-src="*{instrumentPics[0]}" alt="Image 1">
+                        </td>
+                        <td data-th-if="*{instrumentPics.size >= 2}">
+                            <img data-th-src="*{instrumentPics[1]}" alt="Image 2">
+                        </td>
+                        <td data-th-if="*{instrumentPics.size >= 3}">
+                            <img data-th-src="*{instrumentPics[2]}" alt="Image 3">
+                        </td>
+                    </tr>
+                </table>
+                <table class="listing-text">                              
+                    <tr>
+                        <td colspan="2" class="listing-title" data-th-text="*{title}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Availability:</td>
+                        <td data-th-text="*{isAvailable ? 'Available' : 'Unavailable'}">
+                        <span data-th-if="*{isAvailable}" style="color: green;"> &#x2714;</span>
+                        <span data-th-unless="*{isAvailable}" style="color: red;"> &#x2718;</span></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Instrument Type:</td>
+                        <td data-th-text="*{instrumentType}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Instrument Brand:</td>
+                        <td data-th-text="*{instrumentBrand}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Instrument Model:</td>
+                        <td data-th-text="*{instrumentModel}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Fees:</td>
+                        <td>
+                            <span data-th-text="*{fees}"></span>
+                            <span data-th-text="*{priceModel}"></span>
+                        </td>
+                    </tr>                
+                    <tr>
+                        <td class="strong">Description:</td>
+                        <td data-th-text="*{description}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Created on:</td>
+                        <td data-th-text="${#temporals.format(listing.dateCreated, 'dd/MM/yyyy')}"></td>
+                    </tr>
+                    <tr>
+                        <td class="strong">Last Updated:</td>
+                        <td data-th-text="${timeFormatter.getTimeAgo(listing.dateUpdated)}"></td>
+                    </tr>
+                </table>
+                <div class="like-listing">
+                    <h3>Like this Listing</h3>
+                    <form data-th-action="@{'/home/listing/' + *{listingId} + '/like'}" method="post">
+                        <button type="submit" 
+                                data-th-text="${listingLikes} + ' ' + ${isLiked ? '❤️' : '🤍'}">
+                        </button>
+                    </form>                
+                </div>
+            </section>
+    
+            <section id="owner-details">
+                <div class="owner-details">
+                    <h2>Owner Details</h2>
+                    <div class="contact-container">
+                        <div class="about-owner">
+                            <h3>About the Owner</h3>
+                            <h4 data-th-text="${listing.ownerName}"></h4>
+                            <div data-th-if="${ownerProfile != null}" data-th-object="${ownerProfile}">
+                                <!-- display prof pic if available -->
+                                <div class="profile-pic" data-th-if="*{profilePicture != null and !profilePicture.isEmpty()}">
+                                    <img data-th-src="*{profilePicture}" alt="Profile Picture">
+                                </div>
+    
+                                <!-- display default prof pic if unavailable -->
+                                <div class="profile-pic" data-th-if="*{profilePicture == null or profilePicture.isEmpty()}">
+                                    <img src="/default_prof_pic.jpg" alt="Default Profile Picture" style="max-width: 150px; max-height: 150px;">
+                                </div>
+                                <div class="profile-details">
+                                    <div data-th-if="*{dealPreferences != null and !dealPreferences.isEmpty()}">
+                                        <p class="strong">Meetup/Delivery Preferences</p>
+                                        <p data-th-text="*{dealPreferences}"></p>
+                                    </div>
+                                    <div data-th-if="${ownerProfile.username != null and !ownerProfile.username.isEmpty()}" class="profile-link">
+                                        <a data-th-href="@{/profile/{ownerName}(ownerName=${ownerProfile.username})}">
+                                            More about <span data-th-text="${ownerProfile.username}"></span>...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-methods">
+                            <h3>Contact the Owner</h3>
+                            <div class="btn-link" data-th-each="method : ${listing.contactMethods}">
+                                <a data-th-if="${method == 'whatsapp'}" 
+                                    data-th-href="'https://wa.me/+65' + ${listing.ownerNumber} + '?text=' + 
+                                    ${contactMsg}"
+                                    target="_blank" title="Via WhatsApp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a data-th-if="${method == 'telegram'}" 
+                                    data-th-href="'https://t.me/+65' + ${listing.ownerNumber} + '?text=' + 
+                                    ${contactMsg}"
+                                    target="_blank" title="Via Telegram">
+                                    <i class="fab fa-telegram-plane"></i>
+                                </a>
+                                <a data-th-if="${method == 'phonecall'}" 
+                                    data-th-href="'tel:+65' + ${listing.ownerNumber}" 
+                                    target="_blank" title="Via Phone Call">
+                                    <i class="fas fa-phone-alt"></i>
+                                </a>
+                                <a data-th-if="${method == 'others'}" 
+                                    href="#listing-details" data-th-text="'View Description'"></a>
+                            </div>
+                        </div>                    
+                        <div class="location-details">
+                            <h3>Owner Location</h3>
+                            <p data-th-text="${listing.neighborhood}"></p>
+                            <img data-th-src="${staticMapUrl}" alt="Location Map">
+                        </div>
+                    </div>
+                </div>                                                                                  
+            </section>
+        </div>
+
+        <!-- footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

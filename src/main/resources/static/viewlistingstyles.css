@@ -1,0 +1,308 @@
+/* General Reset */
+body, h1, h2, h3, p, ul, li, a, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+    min-height: 100vh; /* Ensure the body takes full height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should take available space */
+.main-content {
+    flex-grow: 1; /* Allow content to grow and fill available space */
+}
+
+header {
+    background-color: #001822;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+
+}
+
+button {
+    padding: 0.75rem 1rem;
+    background-color: #001822;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #003e59;
+}
+
+/* nav menu */
+
+nav .menu {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 1rem;
+}
+
+nav .menu li {
+    margin: 0 1rem;
+}
+
+nav .menu li a {
+    all: unset;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav .menu li a:hover {
+    text-decoration: underline;
+}
+
+/* Section Styles */
+section {
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: #001822;
+    text-align: center;
+}
+
+/* Container Styling */
+div {
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+/* Paragraph and Map Text Styling */
+td {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* container for listings details */
+
+.listing-images {
+    display: flex;             /* Enable flexbox */
+    justify-content: center;   /* Centers images horizontally */
+    align-items: center;       /* Centers images vertically */
+    flex-wrap: wrap;           /* Allows images to wrap if needed */
+}
+
+.listing-images img {
+    display: block;            /* Ensures image behaves as a block element */
+    max-height: 300px;        
+    max-width: 350px;
+    margin: 5px 5px 30px 5px;              /* Adds space between images */
+}
+
+.listing-text {
+    margin: 0 auto;               /* Centers the table horizontally */
+    width: 60%;                    /* Adjusts the width of the table (optional, you can adjust based on your needs) */
+    text-align: justify;              /* Aligns the text inside the table to the left */
+}
+
+.listing-text td {
+    padding: 10px;                /* Adds padding inside each table cell */
+}
+
+.listing-text .strong {
+    font-weight: bold;
+    text-align: left;            /* Ensures that the strong text is bold */
+}
+
+.listing-text .listing-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.like-listing {
+    text-align: center; /* Centers content inside the container */
+}
+
+.like-listing h3 {
+    margin-top: 20px;
+}
+
+.like-listing button {
+    display: block;
+    margin: 10px auto;  /* Centers the button horizontally */
+}
+
+.profile-details .strong {
+    font-weight: bold;
+}
+
+.profile-details {
+    text-align: justify;
+}
+
+/* container for owner details */
+.about-owner {
+    display: flex;
+    flex-direction: column; /* Stack the methods vertically */
+    gap: 5px; /* Add space between methods */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.about-owner h4 {
+    font-size: 1.25rem;
+}
+
+.profile-pic img {
+    border-radius: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-link a {
+    text-decoration: none;
+    color: #003e59;  /* Optional: link color */
+    display: inline-block;  /* Makes the links appear side by side */
+    margin-top: 5px;
+    vertical-align: bottom;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.profile-link a:hover {
+    text-decoration: underline;  /* Optional: hover effect */
+    color: #016894;
+}
+
+/* Container for Contact and Location Details */
+.contact-container {
+    display: flex;
+    flex-direction: row;  
+    justify-content: space-between; /* Space out the text and map */
+    gap: 10px; /* Add space between text and map */
+    flex-wrap: flex-start; /* Allow wrapping on smaller screens */
+}
+
+.contact-methods {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    background-color: #f9f9f9;
+
+}
+
+.contact-methods h3 {
+    text-align: center; /* Centers the title */
+    margin-bottom: 20px;
+}
+
+.btn-link {
+    display: flex; /* Enables flexbox layout */
+    flex-direction: row; /* Make sure the items are aligned in a row */
+    justify-content: center; /* Centers the buttons horizontally */
+    gap: 10px; /* Adds space between buttons */
+    flex-wrap: wrap; /* Ensures buttons wrap to the next line on small screens */
+}
+
+.btn-link a {
+    background-color: #f0f0f0; /* Light grey background for the buttons */
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: #333; /* Icon color */
+    transition: background-color 0.3s, color 0.3s;
+    display: flex; /* Makes sure the link is a flex container for icon centering */
+    align-items: center; /* Centers the icon vertically */
+    justify-content: center; /* Centers the icon horizontally */
+    min-height: 50px;
+    min-width: 50px;
+    max-width: 200px;
+}
+
+/* Hover effect for buttons */
+.btn-link a:hover {
+    background-color: #001822; /* Change to green on hover */
+    color: white;
+}
+
+/* Adjust icon size inside the buttons */
+.btn-link a i {
+    font-size: 1.5rem; /* Adjust icon size */
+}
+
+/* Location Section Styling */
+.location-details {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    width: 100%;
+}
+
+.location-details p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.location-details img {
+    width: 100%;
+    max-width: 400px; /* Ensure map image is not too large */
+    height: auto;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #001822;
+    color: #fff;
+    margin-top: 2rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    flex-shrink: 0;
+}

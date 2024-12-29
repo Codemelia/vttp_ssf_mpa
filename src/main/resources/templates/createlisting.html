@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+        <link href="/createlistingstyles.css" rel="stylesheet">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+        <title>TuneTrove - Create or Edit Listing</title>
+    </head>
+    <body>
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/owner}">Back to My Listings</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="main-content">
+            <form data-th-action="@{/owner/submit}" method="POST" data-th-object="${listing}">
+
+                <h2>Save Your Rental Listing</h2>
+    
+                <div>
+                    <input type="hidden" data-th-field="*{listingId}">
+                </div>
+    
+                <div>
+                    <label for="title">Title <span style="color: red">*</span> :</label>
+                    <input type="text" id="title" data-th-field="*{title}" placeholder="Listing title">
+                    <div data-th-if="${#fields.hasErrors('title')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('title')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+    
+                <div>
+                    <label for="instrumentType">Instrument Type:</label>
+                    <select id="instrumentType" data-th-field="*{instrumentType}">
+                        <option value="Others" selected>Others</option>
+                        <option value="Acoustic Guitar">Acoustic Guitar</option>
+                        <option value="Electric Guitar">Electric Guitar</option>
+                        <option value="Bass Guitar">Bass Guitar</option>
+                        <option value="Ukulele">Ukulele</option>
+                        <option value="Piano">Piano</option>
+                        <option value="Keyboard">Keyboard</option>
+                        <option value="Drums">Drums</option>
+                        <option value="Violin">Violin</option>
+                        <option value="Cello">Cello</option>
+                        <option value="Flute">Flute</option>
+                        <option value="Clarinet">Clarinet</option>
+                        <option value="Saxophone">Saxophone</option>
+                        <option value="Trumpet">Trumpet</option>
+                        <option value="Trombone">Trombone</option>
+                        <option value="Microphone">Microphone</option>
+                        <option value="Amplifier">Amplifier</option>
+                        <option value="DJ Equipment">DJ Equipment</option>
+                    </select>
+                    <div data-th-if="${#fields.hasErrors('instrumentType')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('instrumentType')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+    
+                <div>
+                    <label for="instrumentBrand">Instrument Brand:</label>
+                    <input type="text" id="instrumentBrand" data-th-field="*{instrumentBrand}" placeholder="Instrument brand">
+                    <div data-th-if="${#fields.hasErrors('instrumentBrand')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('instrumentBrand')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+    
+                <div>
+                    <label for="instrumentModel">Instrument Model:</label>
+                    <input type="text" id="instrumentModel" data-th-field="*{instrumentModel}" placeholder="Instrument model">
+                    <div data-th-if="${#fields.hasErrors('instrumentModel')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('instrumentModel')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+    
+                <div>
+                    <label>Instrument Pictures (URL):</label>
+                    <div class="pics-url">
+                        <label for="instrumentPics1">Picture 1:</label>
+                        <input type="url" data-th-field="*{instrumentPics[0]}" id="instrumentPics1" placeholder="Enter a valid image URL in JPG or PNG format">
+                    </div>
+                    <div class="pics-url">
+                        <label for="instrumentPics2">Picture 2:</label>
+                        <input type="url" data-th-field="*{instrumentPics[1]}" id="instrumentPics2" placeholder="Enter a valid image URL in JPG or PNG format">
+                    </div>
+                    <div class="pics-url">
+                        <label for="instrumentPics3">Picture 3:</label>
+                        <input type="url" data-th-field="*{instrumentPics[2]}" id="instrumentPics3" placeholder="Enter a valid image URL in JPG or PNG format">
+                    </div>
+                    <div data-th-if="${#fields.hasErrors('instrumentPics')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('instrumentPics')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+        
+                <div>
+                    <label for="description">Description <span style="color: red">*</span> :</label>
+                    <textarea id="description" data-th-field="*{description}" 
+                        placeholder="Describe your listing" 
+                        rows="5" cols="50"></textarea>
+                    <div data-th-if="${#fields.hasErrors('description')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('description')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+        
+                <div>
+                    <label for="fees">Fees <span style="color: red">*</span> :</label>
+                    <div class="price-container">
+                        <input type="number" id="fees" data-th-field="*{fees}" step="0.5" min="0">
+                        <select id="priceModel" name="priceModel" data-th-field="*{priceModel}">
+                            <option value="hourly" selected>Hourly</option>
+                            <option value="daily">Daily</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div data-th-if="${#fields.hasErrors('fees')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('fees')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+        
+                <div>
+                    <label>Availability <span style="color: red">*</span> :</label>
+                    <div class="radio-buttons">
+                        <input type="radio" id="availableYes" name="isAvailable" data-th-field="*{isAvailable}" value="true">
+                        <label for="availableYes">Available</label>
+                        <input type="radio" id="availableNo" name="isAvailable" data-th-field="*{isAvailable}" value="false">
+                        <label for="availableNo">Unavailable</label>
+                    </div>
+                    <div data-th-if="${#fields.hasErrors('isAvailable')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('isAvailable')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+    
+                <div class="contact-methods">
+                    <label>Preferred contact methods <span style="color: red">*</span> :</label>
+                    <div class="checkbox-group">
+                        <label for="whatsapp" class="checkbox-label">
+                            <input type="checkbox" id="whatsapp" data-th-field="*{contactMethods}" value="whatsapp">
+                            WhatsApp <i class="fab fa-whatsapp"></i>
+                        </label>
+                    
+                        <label for="telegram" class="checkbox-label">
+                            <input type="checkbox" id="telegram" data-th-field="*{contactMethods}" value="telegram">
+                            Telegram <i class="fab fa-telegram-plane"></i>
+                        </label>
+                    
+                        <label for="phonecall" class="checkbox-label">
+                            <input type="checkbox" id="phonecall" data-th-field="*{contactMethods}" value="phonecall">
+                            Phone Call <i class="fas fa-phone-alt"></i>
+                        </label>
+                    
+                        <label for="others" class="checkbox-label">
+                            <input type="checkbox" id="others" data-th-field="*{contactMethods}" value="others">
+                            Others <i class="fas fa-ellipsis-h"></i>
+                        </label>
+                        <p class="help-text">If you would like to be contacted via other methods, select "Others" and specify them in your listing description</p>
+                    </div>                               
+                    <div data-th-if="${#fields.hasErrors('contactMethods')}" class="text-danger">
+                        <p data-th-each="err : ${#fields.errors('contactMethods')}" data-th-text="${err}"></p>
+                    </div>
+                </div>
+        
+                <button type="submit">Save</button>
+            </form>
+        </div>
+        
+        <!-- footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>

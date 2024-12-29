@@ -1,0 +1,389 @@
+/* General Reset */
+body, h1, h2, h3, p, ul, li, a, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+    min-height: 100vh; /* Ensure the body takes full height */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content should take available space */
+.main-content {
+    flex-grow: 1; /* Allow content to grow and fill available space */
+}
+
+header {
+    background-color: #001822;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+}
+
+nav .menu {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 1rem;
+}
+
+nav .menu li {
+    margin: 0 1rem;
+}
+
+nav .menu li a {
+    all: unset;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav .menu li a:hover {
+    text-decoration: underline;
+}
+
+/* Section Styles */
+section {
+    padding: 2rem;
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #001822;
+}
+
+/* dropdown section */
+/* Dropdown container styles */
+
+.dropdown {
+    position: relative;
+    display: block;
+    margin-top: 20px;
+}
+
+.dropdown-checkbox {
+    display: none; /* Hide the checkbox */
+}
+
+.dropdown-toggle {
+    display: flex;
+    justify-content: space-between; /* Aligns the text and arrow */
+    align-items: center; /* Centers the arrow vertically */
+    background-color: #fff;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-toggle:hover {
+    background-color: #cdcdcd;
+}
+
+.arrow {
+    font-size: 1rem;
+    transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+/* Rotate the arrow when the checkbox is checked */
+.dropdown-checkbox:checked + .dropdown-toggle .arrow {
+    transform: rotate(180deg);
+}
+
+/* Hidden content styles */
+.dropdown-content {
+    display: none;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #505050;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Show content when the checkbox is checked */
+.dropdown-checkbox:checked + .dropdown-toggle + .dropdown-content {
+    display: block;
+}
+
+/* Card Styles */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns with equal width */
+    grid-gap: 20px; /* Space between items */
+    grid-auto-rows: minmax(100px, auto); /* Ensure items are at least 100px tall */
+}
+
+#liked-listings .card-container {
+    max-height: 600px; /* Set the maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 10px; /* Add padding to account for scrollbar space */
+}
+
+#liked-listings .card-container::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+#liked-listings .card-container::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded corners for scrollbar thumb */
+}
+
+#liked-listings .card-container::-webkit-scrollbar-thumb:hover {
+    background-color: #999; /* Change color on hover */
+}
+
+#liked-listings .card-container::-webkit-scrollbar-track {
+    background-color: #f9f9f9; /* Scrollbar track background color */
+}
+
+.card {
+    border: 1px solid #ccc;
+    display: inline-block;
+    width: 320px;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 1rem 0;
+    background-color: #f9f9f9;
+    justify-content: center;
+    vertical-align: middle;
+    overflow: hidden; /* Hide any content that overflows */
+    text-overflow: ellipsis; /* Show ellipsis (...) if text overflows */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+}
+
+/* listing titles */
+.card h3 {
+    font-size: 1.5rem;
+    color: #ccc;
+    text-align: center;
+    padding: 5px;
+    background-color: #00567a;
+    border-radius: 5px;
+    position: relative;
+}
+
+/* container holding listing titles */
+.listing-title {
+    width: 100%; /* Ensure the container takes up full width of the parent */
+    overflow: hidden; /* Hide any content that overflows */
+    text-overflow: ellipsis; /* Show ellipsis (...) if text overflows */
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+}
+
+.card p {
+    margin: 0.8rem auto;
+    color: #666;
+}
+
+#last-updated {
+    font-size: 0.8rem;
+}
+
+img {
+    max-width: 300px;
+    max-height: 300px;
+    display: block;
+    margin: 10px auto;
+}
+
+.ellipsis {
+    white-space: nowrap; /* Prevent text from wrapping to the next line */
+    overflow: hidden;    /* Hide the overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis (...) to the hidden text */
+    width: 280px;        /* Set a fixed width for the element */
+    margin: 5px auto;      /* Center the element within its container */
+}
+
+/* Quick Actions */
+#quick-actions .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+#quick-actions button {
+    background-color: #003e59;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    height: 45px;
+    margin-bottom: 5px;
+}
+
+#quick-actions button:hover {
+    background-color: #001822;
+}
+
+/* Form and Filter Styles */
+form {
+    display: block;
+    align-items: center;
+}
+
+form label {
+    font-size: 1rem;
+}
+
+form input {
+    margin-bottom: 5px;
+}
+
+form select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    background-color: #003e59;
+    border: 1px solid #ccc;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 44px;
+    margin-bottom: 5px;
+}
+
+button:hover {
+    background-color: #001822;
+}
+
+#search {
+    padding: 0.75rem;
+    width: 90%;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    display:flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.mods-container {
+    text-align: center;
+}
+
+.mods-1, .mods-2 {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#radius-slider {
+    width: 50%;
+}
+
+#radius-value {
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.btn-container {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align buttons vertically */
+    justify-content: center; /* Align buttons to the left (or use center/right if desired) */
+    gap: 20px;
+}
+
+.pagination {
+    padding: 15px;
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+.pagination a {
+    all: unset;
+    color: #3c3c3c;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.pagination a:hover {
+    text-decoration: underline;
+}
+
+.listMessage {
+    font-size: 0.875rem;
+    color: #2d7534;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#error {
+    font-size: 0.875rem;
+    color: #d9534f;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #001822;
+    color: #fff;
+    margin-top: 2rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 items per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        grid-template-columns: 1fr; /* 1 item per row */
+    }
+}

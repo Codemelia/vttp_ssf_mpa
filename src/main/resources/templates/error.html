@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+    <title>TuneTrove - Error Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 50px;
+            text-align: center;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8d7da;
+            border-radius: 10px;
+            border: 1px solid #f5c6cb;
+        }
+        .error-container h1 {
+            color: #161616;
+            font-size: 3rem;
+        }
+
+        .error-container h2 {
+            color: #2b2b2b;
+            font-size: 2rem;
+        }
+
+        .error-container p {
+            color: #721c24;
+            font-size: 1.25rem;
+        }
+        .error-container a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #004085;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .error-container a:hover {
+            background-color: #002752;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Error</h1>
+        <h2>Oops! Something went wrong.</h2>
+        <p data-th-href="${error}">An unexpected error occurred. Please try again. </p>
+        <a data-th-href="@{/home}">Home</a>
+    </div>
+</body>
+</html>

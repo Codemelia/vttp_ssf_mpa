@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="logstyles.css">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+        <title>TuneTrove - Log In</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="left-side">
+                <div class="branding">
+                    <h1 class="text-primary">TuneTrove</h1>
+                    <p class="lead">A treasure trove of instruments you can rent to craft your tunes.</p>
+                </div>
+            </div>
+
+            <div class="right-side">
+                <div class="card">
+                    <!-- display successful reg message if reg successful -->
+                    <div class="successMessage" data-th-if="${successMessage}">
+                        <p data-th-text="${successMessage}"></p>
+                    </div>
+
+                    <!-- display error message if login failed/unauthenticated -->
+                    <div class="text-global-danger" data-th-if="${errorMessage}">
+                        <p data-th-text="${errorMessage}"></p>
+                    </div>
+
+                    <h2 class="text-center">Log in to explore the trove!</h2>
+
+                    <form action="/login" method="post" data-th-object="${userLogin}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username <span style="color: red">*</span> : </label>
+                            <input type="text" id="username" data-th-field="*{username}" class="form-control" placeholder="Enter your username">
+                            <div data-th-if="${#fields.hasErrors('username')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('username')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password <span style="color: red">*</span> : </label>
+                            <input type="password" id="password" data-th-field="*{password}" class="form-control" placeholder="Enter your password">
+                            <div data-th-if="${#fields.hasErrors('password')}" class="text-danger">
+                                <p data-th-each="err : ${#fields.errors('password')}" data-th-text="${err}"></p>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn-primary">Login</button>
+                        </div>
+
+                        <div data-th-if="${#fields.hasErrors('global')}" class="text-global-danger">
+                            <p data-th-each="err : ${#fields.errors('global')}" data-th-text="${err}"></p>
+                        </div>
+
+                    </form>
+
+                    <div class="text-center">
+                        <p>Don't have an account?</p>
+                        <a href="/register" class="btn-link">Register a new account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

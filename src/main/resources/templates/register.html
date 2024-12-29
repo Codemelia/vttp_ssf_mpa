@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TuneTrove - Sign Up</title>
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png"> 
+        <link rel="stylesheet" href="regstyles.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>TuneTrove</h1>
+            </div>
+
+            <div class="form-container">
+                <h2>Register to start renting!</h2>
+
+                <form action="/register" method="post" data-th-object="${userRegistration}">
+
+                    <!-- display global error message if form submission fails -->
+                    <div data-th-if="${#fields.hasErrors('global')}" class="text-global-danger">
+                        <p data-th-each="err : ${#fields.errors('global')}" data-th-text="${err}"></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="number" class="form-label">Mobile Number <span style="color: red">*</span> :</label>
+                        <input type="tel" id="number" data-th-field="*{number}" placeholder="Enter your SG mobile number" class="form-control">
+                        <div data-th-if="${#fields.hasErrors('number')}" class="text-danger">
+                            <p data-th-each="err : ${#fields.errors('number')}" data-th-text="${err}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address <span style="color: red">*</span> :</label>
+                        <input type="text" id="address" data-th-field="*{address}" placeholder="Enter your SG address" class="form-control">
+                        <div data-th-if="${#fields.hasErrors('address')}" class="text-danger">
+                            <p data-th-each="err : ${#fields.errors('address')}" data-th-text="${err}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="birthDate" class="form-label">Date of Birth <span style="color: red">*</span> :</label>
+                        <input type="date" id="birthDate" data-th-field="*{birthDate}" class="form-control">
+                        <div data-th-if="${#fields.hasErrors('birthDate')}" class="text-danger">
+                            <p data-th-each="err : ${#fields.errors('birthDate')}" data-th-text="${err}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Username <span style="color: red">*</span> :</label>
+                        <input type="text" id="name" data-th-field="*{username}" placeholder="Enter your name" class="form-control">
+                        <div data-th-if="${#fields.hasErrors('username')}" class="text-danger">
+                            <p data-th-each="err : ${#fields.errors('username')}" data-th-text="${err}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password <span style="color: red">*</span> :</label>
+                        <input type="password" id="password" data-th-field="*{password}" placeholder="Enter your password" class="form-control">
+                        <div data-th-if="${#fields.hasErrors('password')}" class="text-danger">
+                            <p data-th-each="err : ${#fields.errors('password')}" data-th-text="${err}"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <button type="submit" class="btn-primary">Sign Up</button>
+                    </div>
+
+                </form>
+
+                <div class="text-center">
+                    <p>Already have an account?</p>
+                    <a href="/" class="btn-link">Login here</a>
+                </div>
+                
+            </div>
+        </div>
+
+    </body>
+</html>

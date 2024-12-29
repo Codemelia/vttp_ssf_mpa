@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TuneTrove - Homepage</title>
+        <link rel="stylesheet" href="/homepagestyles.css">
+        <link rel="icon" href="/tunetrove_logo.png" type="image/png">
+        <script>
+            // save the scroll position before the page unloads
+            window.addEventListener("beforeunload", () => {
+                localStorage.setItem("scrollPosition", window.scrollY);
+            });
+
+            // smooth scroll restoration on page load
+            window.addEventListener("load", () => {
+                const scrollPosition = localStorage.getItem("scrollPosition");
+                if (scrollPosition) {
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: parseInt(scrollPosition, 10),
+                            behavior: "smooth", // smooth scrolling effect
+                        });
+                    }, 50); // delay ensures layout is stable
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>TuneTrove</h1>
+            <nav>
+                <ul class="menu">
+                    <li><a data-th-href="@{/owner}">My Listings</a></li>
+                    <li><a data-th-href="@{/profile/{username}(username=${username})}">My Profile</a></li>
+                    <li><a data-th-href="@{/calendar}">My Calendar</a></li>
+                    <li><a data-th-href="@{/logout}">Log Out</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="main-content">
+            <!-- error message -->
+            <section id="error" data-th-if="${errMessage}">
+                <p data-th-text="${errMessage}"></p>
+            </section>
+
+            <!-- welcome message -->
+            <section id="welcome">
+                <h2>Welcome to TuneTrove, <span data-th-text="${username}"></span></h2>
+                <p>Your one-stop hub for renting instruments and listing instruments for rent!</p>
+                <div class="dropdown">
+                    <!-- hidden checkbox to toggle content -->
+                    <input type="checkbox" id="about-toggle" class="dropdown-checkbox">
+                    <label for="about-toggle" class="dropdown-toggle">
+                        About TuneTrove
+                        <span class="arrow">&#9660;</span>
+                    </label>
+                    <div class="dropdown-content">
+                        <p>
+                            TuneTrove was curated specially for musicians who want to rent or list instruments
+                            on the go. Whether you are a musician looking to try a model out before committing 
+                            to a purchase or an owner looking to list your unused instruments, TuneTrove will 
+                            find you the perfect match.
+                        </p>
+                        <br>
+                        <p>
+                            With features like geolocation-based search, seamless contact methods, and a personal 
+                            calendar, we aim to make the process of renting and listing instruments smooth and easy.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- quick actions -->
+            <section id="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="actions">
+                    <a data-th-href="@{/profile}"><button>Manage Your Profile</button></a>
+                    <a href="#browse-listings"><button>Browse and Search Listings</button></a>
+                    <a href="#liked-listings"><button>View Your Liked Listings</button></a>
+                </div>
+            </section>
+
+            <!-- browse listings -->
+            <section id="browse-listings">
+                <h2>Browse Listings</h2>
+                <form method="get" action="/home">
+                    <div class="search-container">
+                        <input type="text" name="search" id="search" placeholder="Search Listings" data-th-value="${search}">
+                        <button type="submit">Search</button>
+                    </div>  
+
+                    <div class="mods-container">
+                        <div class="mods-2">
+                            <label for="radius-slider">Select Search Radius </label>
+                            <input type="range" name="radius" id="radius-slider" min="1" max="50" data-th-value="${radius}" step="1">
+                            <span id="radius-value" data-th-text="${radius} + 'km'"></span>
+                        </div>
+                        <div class="mods-1">
+                            <label for="filter">Filter By:</label>
+                            <select name="filter" id="filter" onchange="this.form.submit()">
+                                <option value="all" data-th-selected="${filter == 'all'}">All Instruments</option>
+                                <option value="Acoustic Guitar" data-th-selected="${filter == 'Acoustic Guitar'}">Acoustic Guitar</option>
+                                <option value="Electric Guitar" data-th-selected="${filter == 'Electric Guitar'}">Electric Guitar</option>
+                                <option value="Bass Guitar" data-th-selected="${filter == 'Bass Guitar'}">Bass Guitar</option>
+                                <option value="Ukulele" data-th-selected="${filter == 'Ukulele'}">Ukulele</option>
+                                <option value="Piano" data-th-selected="${filter == 'Piano'}">Piano</option>
+                                <option value="Keyboard" data-th-selected="${filter == 'Keyboard'}">Keyboard</option>
+                                <option value="Drums" data-th-selected="${filter == 'Drums'}">Drums</option>
+                                <option value="Violin" data-th-selected="${filter == 'Violin'}">Violin</option>
+                                <option value="Cello" data-th-selected="${filter == 'Cello'}">Cello</option>
+                                <option value="Flute" data-th-selected="${filter == 'Flute'}">Flute</option>
+                                <option value="Clarinet" data-th-selected="${filter == 'Clarinet'}">Clarinet</option>
+                                <option value="Saxophone" data-th-selected="${filter == 'Saxophone'}">Saxophone</option>
+                                <option value="Trumpet" data-th-selected="${filter == 'Trumpet'}">Trumpet</option>
+                                <option value="Trombone" data-th-selected="${filter == 'Trombone'}">Trombone</option>
+                                <option value="Microphone" data-th-selected="${filter == 'Microphone'}">Microphone</option>
+                                <option value="Amplifier" data-th-selected="${filter == 'Amplifier'}">Amplifier</option>
+                                <option value="DJ Equipment" data-th-selected="${filter == 'DJ Equipment'}">DJ Equipment</option>
+                                <option value="Others" data-th-selected="${filter == 'Others'}">Others</option>
+                            </select>
+
+                            <label for="sorter">Sort By:</label>
+                            <select name="sorter" id="sorter" onchange="this.form.submit()">
+                                <option value="latest" data-th-selected="${sorter == 'latest'}">Latest Listings</option>
+                                <option value="distance" data-th-selected="${sorter == 'distance'}">Nearest Listings</option>
+                                <option value="fees-low-to-high" data-th-selected="${sorter == 'fees-low-to-high'}">Fees: Low to High</option>
+                                <option value="fees-high-to-low" data-th-selected="${sorter == 'fees-high-to-low'}">Fees: High to Low</option>
+                            </select>
+
+                            <input type="checkbox" name="excludeOwn" id="excludeOwn" value="true" onchange="this.form.submit()"
+                                data-th-checked="${excludeOwn != null && excludeOwn == 'true'}">
+                            <label for="excludeOwn">Exclude My Listings</label>
+
+                            <input type="checkbox" name="onlyAvail" id="onlyAvail" value="true" onchange="this.form.submit()"
+                                data-th-checked="${onlyAvail == 'true'}">
+                            <label for="onlyAvail">Only Available Listings </label>
+                        </div>
+                    </div>
+                </form>        
+                <data-th-block data-th-if="${#lists.isEmpty(browseListings)}">
+                    <p style="text-align:center;">No Listings Available</p>
+                </data-th-block>
+                <data-th-block data-th-unless="${#lists.isEmpty(browseListings)}">
+                    <div class="card-container">
+                        <div class="card" data-th-each="listing : ${browseListings}">
+                            <div class="listing-title">
+                                <h3 data-th-text="${listing.title}"></h3>
+                            </div>
+                            <img data-th-if="${listing.instrumentPics != null and listing.instrumentPics.size() > 0}" 
+                                data-th-src="${listing.instrumentPics[0]}" 
+                                alt="Cover Image of Instrument">
+                            <!-- display default pic if unavailable -->
+                            <img data-th-if="${listing.instrumentPics == null or listing.instrumentPics.size() == 0}" 
+                                src="/default_instru_pic.png" alt="Default Cover Image">
+                            <div class="ellipsis">
+                                <p data-th-text="'Listed: ' + ${listing.instrumentType} + ' ' + ${listing.instrumentBrand} + ' - ' + ${listing.instrumentModel}"></p>
+                                <p data-th-text="'Fees: $' + ${listing.fees} + ' ' + ${listing.priceModel}"></p>                       
+                                <p data-th-text="'Location: ' + ${listing.neighborhood}"></p>
+                                <p id="last-updated" data-th-text="'Last updated ' + ${timeFormatter.getTimeAgo(listing.dateUpdated)}"></p>
+                            </div>
+                            <div class="btn-container">
+                                <form data-th-action="@{'/home/listing/' + ${listing.listingId} + '/like'}" method="post">
+                                    <button id="btn-like" type="submit" 
+                                            data-th-text="${allLikesMap[listing.listingId] != null ? allLikesMap[listing.listingId] : 0} + ' ' + ${#sets.contains(userLikesIds, listing.listingId) ? '❤️' : '🤍'}"></button>
+                                </form>
+                                <a data-th-href="@{/home/listing/{id}(id=${listing.listingId})}"><button id="btn-details">View Details</button></a>
+                            </div>                                               
+                        </div>
+                    </div>
+                    <div class="pagination">
+                        <!-- pagination -->
+                        <a data-th-if="${currentPage > 0}"
+                            data-th-href="@{'/home'(page=${currentPage - 1}, size=${size}, search=${search}, filter=${filter}, sorter=${sorter}, excludeOwn=${excludeOwn}, radius=${radius}, onlyAvail=${onlyAvail})}">Previous</a>
+                    
+                        <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+                    
+                        <a data-th-if="${currentPage + 1 < totalPages}"
+                        data-th-href="@{'/home'(page=${currentPage + 1}, size=${size}, search=${search}, filter=${filter}, sorter=${sorter}, excludeOwn=${excludeOwn}, radius=${radius}, onlyAvail=${onlyAvail})}">Next</a>
+                    </div>
+                </data-th-block>
+            </section>
+
+            <!-- liked listings -->
+            <section id="liked-listings">
+                <h2>My Liked Listings (<span data-th-text="${likesMap.size()}"></span>)</h2>
+                <data-th-block data-th-if="${#lists.isEmpty(userLikes)}">
+                    <p style="text-align:center;">No Listings Available</p>
+                </data-th-block>
+                <data-th-block data-th-unless="${#lists.isEmpty(userLikes)}">
+                    <div class="card-container">
+                        <div class="card" data-th-each="listing : ${userLikes}">
+                            <div class="listing-title">
+                                <h3 data-th-text="${listing.title}"></h3>
+                            </div>
+                            <img data-th-if="${listing.instrumentPics != null and listing.instrumentPics.size() > 0}" 
+                                data-th-src="${listing.instrumentPics[0]}" 
+                                alt="Cover image of Instrument">
+                            <!-- display default pic if unavailable -->
+                            <img data-th-if="${listing.instrumentPics == null or listing.instrumentPics.size() == 0}" 
+                                src="/default_instru_pic.png" alt="Default Cover Image">
+                            <div class="ellipsis">
+                                <p data-th-text="'Listed: ' + ${listing.instrumentType} + ' ' + ${listing.instrumentBrand} + ' - ' + ${listing.instrumentModel}"></p>
+                                <p data-th-text="'Fees: $' + ${listing.fees} + ' ' + ${listing.priceModel}"></p>                       
+                                <p data-th-text="'Location: ' + ${listing.neighborhood}"></p>
+                                <p id="last-updated" data-th-text="'Last updated ' + ${timeFormatter.getTimeAgo(listing.dateUpdated)}"></p>
+                            </div>
+                            <div class="btn-container">
+                                <form data-th-action="@{'/home/listing/' + ${listing.listingId} + '/like'}" method="post">
+                                    <button id="btn-like" type="submit" 
+                                            data-th-text="${likesMap[listing.listingId] != null ? likesMap[listing.listingId] : 0} + ' ' + ${#sets.contains(userLikesIds, listing.listingId) ? '❤️' : '🤍'}"></button>
+                                </form>
+                                <a data-th-href="@{/home/listing/{id}(id=${listing.listingId})}"><button id="btn-details">View Details</button></a> 
+                            </div>                                                                                                       
+                        </div>
+                    </div>
+                </data-th-block>
+            </section>
+        </div>
+
+        <!-- footer -->
+        <footer>
+            <p>&copy; 2024 TuneTrove. All rights reserved.</p>
+        </footer>
+    </body>
+</html>
