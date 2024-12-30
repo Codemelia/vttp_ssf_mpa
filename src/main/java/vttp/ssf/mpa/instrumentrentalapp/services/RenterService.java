@@ -102,11 +102,6 @@ public class RenterService {
         // get user from username
         UserRegistration user = userSvc.retrieveUser(username);
 
-        // if default, return listings
-        if (radius == 50) {
-            return listings;
-        }
-
         // else return filtered listings by dist
         return listings.stream() // stream
             .filter(listing -> calcDistance(user.getLatitude(), user.getLongitude(), listing) <= radius) // distance must be less than or equal to max radius
@@ -159,10 +154,6 @@ public class RenterService {
     // filter listings
     public List<RentalListing> filterListings(String filter, List<RentalListing> listings) {
 
-        if (filter.equals("all")) {
-            return listings; // no filter by default
-        }
-
         return listings.stream() // stream
             .filter(listing -> listing.getInstrumentType().equals(filter)) // filter by filter value
             .collect(Collectors.toList()); // collect to list
@@ -171,11 +162,6 @@ public class RenterService {
 
     // for user to exclude own listings from browseListings
     public List<RentalListing> excludeOwnListings(String excludeOwn, String username, List<RentalListing> listings) {
-
-        // if value is false, return listings
-        if (excludeOwn.equals("false")) {
-            return listings;
-        }
 
         // option for user to exclude own listings from browseListings
         return listings.stream() // stream
@@ -187,11 +173,6 @@ public class RenterService {
     // for user to exclude own listings from browseListings
     public List<RentalListing> onlyAvailListings(String onlyAvail, List<RentalListing> listings) {
 
-        // if value is false, return listings
-        if (onlyAvail.equals("false")) {
-            return listings;
-        }
-
         return listings.stream() // stream
             .filter(listing -> listing.getIsAvailable() == true) // filter available listings
             .collect(Collectors.toList()); // collect to list
@@ -200,11 +181,6 @@ public class RenterService {
 
     // for user to search and query browseListings
     public List<RentalListing> searchListings(String searchQuery, List<RentalListing> listings) {
-
-        // if search null, return listings
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            return listings;
-        }
 
         // search query to allow user to search listings
         return listings.stream() // stream
@@ -253,41 +229,51 @@ public class RenterService {
         List<RentalListing> cachedListings = getCachedListings(cacheKey);
 
         // new listing to store redis data
-        List<RentalListing> allListings = new ArrayList<>();
+        List<RentalListing> listings = new ArrayList<>();
 
         // if cachekey exists in redis, get data from redis cache; else, get data from redis storage
         if (cachedListings != null && !cachedListings.isEmpty()) {
-            allListings = cachedListings;
+            listings = cachedListings;
             logger.info(">>> Retrieving from Cache...");
         } else {
-            allListings = getAllListings();
+            listings = getAllListings();
             logger.info(">>> Retrieving from Storage...");
         }
 
         // tracking/debugging
         // logger.info(">>> Retrieved listings from Redis: %s".formatted(allListings));
+
+        // radius listings if radius not default
+        if (radius != 50) {
+            listings = getRadiusListings(radius, username, listings);
+        }
+
+        // if search not null, search listings
+        if (search != null && !search.isEmpty()) {
+            listings = searchListings(search, listings);
+        }
         
-        // filter listings
-        List<RentalListing> filteredListings = filterListings(filter, allListings);
+        // filter listings if not default
+        if (!filter.equals("all")) {
+            listings = filterListings(filter, listings);
+        }
         
-        // sort listings
-        List<RentalListing> sortListings = sortListings(sorter, username, filteredListings);
+        // sort listings - defaults to latest listings
+        listings = sortListings(sorter, username, listings);
 
-        // exclude listings
-        List<RentalListing> excludeListings = excludeOwnListings(excludeOwn, username, sortListings);
+        // exclude listings if value is true
+        if (excludeOwn.equals("true")) {
+            listings = excludeOwnListings(excludeOwn, username, listings);
+        }
 
-        // display only avail listings
-        List<RentalListing> availListings = onlyAvailListings(onlyAvail, excludeListings);
-
-        // search listings
-        List<RentalListing> searchListings = searchListings(search, availListings);
-
-        // radius listings
-        List<RentalListing> browseListings = getRadiusListings(radius, username, searchListings);
+        // display only avail listings if value is true
+        if (onlyAvail.equals("true")) {
+            listings = onlyAvailListings(onlyAvail, listings);
+        }
 
         // save listings in cache if not alr in cache
         if ((cachedListings == null || cachedListings.isEmpty()) && !(search == null || search.isEmpty())) { // only cache when users use search to keep results fresh and reduce redundancy
-            browseListings.forEach(listing -> { 
+            listings.forEach(listing -> { 
                 rentRepo.cacheQuery(cacheKey, listing.getListingId(), sharedSvc.convListingToJson(listing.getOwnerName(), listing));
             });    
         }
@@ -295,7 +281,7 @@ public class RenterService {
         // tracking/debugging
         // logger.info(">>> Listings after browse functions: %s".formatted(browseListings));
 
-        return browseListings;
+        return listings;
     }
 
     // LIKE LISTING FUNCTIONS
